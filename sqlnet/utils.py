@@ -127,6 +127,11 @@ def to_batch_query(sql_data, idxes, st, ed):
         table_ids.append(sql_data[idxes[i]]['table_id'])
     return query_gt, table_ids
 
+def pretty_print(vis_data):
+    print('question:', vis_data[0])
+    print('headers: (%s)'%(' || '.join(vis_data[1])))
+    print('query:', vis_data[2])
+
 def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     model.train()
     perm=np.random.permutation(len(sql_data))
@@ -137,6 +142,14 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
 
         q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq = \
                 to_batch_seq(sql_data, table_data, perm, st, ed)
+        pretty_print(raw_data[0])
+        print("q_seq: ", q_seq[0])
+        print("col_seq: ", col_seq[0])
+        print("col_num: ", col_num[0])
+        print("ans_seq: ", ans_seq[0])
+        print("query_seq: ", query_seq[0])
+        print("gt_cond_seq: ", gt_cond_seq[0])
+        
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
         gt_sel_seq = [x[1] for x in ans_seq]
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
