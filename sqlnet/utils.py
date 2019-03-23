@@ -181,6 +181,7 @@ def epoch_exec_acc(model, batch_size, sql_data, table_data, db_path):
 
         for idx, (sql_gt, sql_pred, tid) in enumerate(
                 zip(query_gt, pred_queries, table_ids)):
+            print("question:", sql_data[idx]["question"])
             ret_gt = engine.execute(tid,
                     sql_gt['sel'], sql_gt['agg'], sql_gt['conds'], isGold=True)
             try:
