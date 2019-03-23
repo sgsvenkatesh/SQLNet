@@ -182,11 +182,10 @@ def epoch_exec_acc(model, batch_size, sql_data, table_data, db_path):
         for idx, (sql_gt, sql_pred, tid) in enumerate(
                 zip(query_gt, pred_queries, table_ids)):
             ret_gt = engine.execute(tid,
-                    sql_gt['sel'], sql_gt['agg'], sql_gt['conds'])
+                    sql_gt['sel'], sql_gt['agg'], sql_gt['conds'], True)
             try:
-                print(tid, sql_pred['sel'], sql_pred['agg'], sql_pred['conds'])
                 ret_pred = engine.execute(tid,
-                        sql_pred['sel'], sql_pred['agg'], sql_pred['conds'])
+                        sql_pred['sel'], sql_pred['agg'], sql_pred['conds'], False)
             except:
                 ret_pred = None
             tot_acc_num += (ret_gt == ret_pred)

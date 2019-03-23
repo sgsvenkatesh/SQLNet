@@ -18,7 +18,7 @@ class DBEngine:
     def execute_query(self, table_id, query, *args, **kwargs):
         return self.execute(table_id, query.sel_index, query.agg_index, query.conditions, *args, **kwargs)
 
-    def execute(self, table_id, select_index, aggregation_index, conditions, lower=True):
+    def execute(self, table_id, select_index, aggregation_index, conditions, lower=True, isGold=False):
         if not table_id.startswith('table'):
             table_id = 'table_{}'.format(table_id.replace('-', '_'))
         table_info = self.db.query('SELECT sql from sqlite_master WHERE tbl_name = :name', name=table_id).all()[0].sql.replace('\n','')
@@ -47,6 +47,12 @@ class DBEngine:
         if where_clause:
             where_str = 'WHERE ' + ' AND '.join(where_clause)
         query = 'SELECT {} AS result FROM {} {}'.format(select, table_id, where_str)
+
+        if isGold:
+            print("Gold query: " + query)
+        else:
+            print("Pred query: " + query)
+
         #print query
         out = self.db.query(query, **where_map)
         return [o.result for o in out]
