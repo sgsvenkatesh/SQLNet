@@ -184,6 +184,7 @@ def epoch_exec_acc(model, batch_size, sql_data, table_data, db_path):
             ret_gt = engine.execute(tid,
                     sql_gt['sel'], sql_gt['agg'], sql_gt['conds'])
             try:
+                print(tid, sql_pred['sel'], sql_pred['agg'], sql_pred['conds'])
                 ret_pred = engine.execute(tid,
                         sql_pred['sel'], sql_pred['agg'], sql_pred['conds'])
             except:
@@ -204,13 +205,6 @@ def epoch_acc(model, batch_size, sql_data, table_data, pred_entry):
         ed = st+batch_size if st+batch_size < len(perm) else len(perm)
 
         q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data = to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
-        pretty_print(raw_data[0])
-        print("q_seq: ", q_seq[0])
-        print("col_seq: ", col_seq[0])
-        print("col_num: ", col_num[0])
-        print("ans_seq: ", ans_seq[0])
-        print("query_seq: ", query_seq[0])
-        print("gt_cond_seq: ", gt_cond_seq[0])
         
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
